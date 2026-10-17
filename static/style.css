@@ -1,0 +1,281 @@
+:root {
+    --bg: #0b1020;
+    --panel: #131d31;
+    --line: #293750;
+    --text: #edf3ff;
+    --muted: #9aa9c1;
+    --cyan: #62e6d4;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: radial-gradient(ellipse at top left, #1b3150, var(--bg) 55%);
+    color: var(--text);
+    font: 15px/1.6 "Segoe UI", Arial, sans-serif;
+}
+
+.topbar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 20px max(calc((100% - 1000px) / 2), 24px);
+    border-bottom: 1px solid var(--line);
+}
+
+.logo {
+    background: var(--cyan);
+    color: #07131c;
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: 900;
+}
+
+h1, h2, h3, h4 {
+    line-height: 1.25;
+}
+
+h1 {
+    font-size: 21px;
+    margin: 0;
+}
+
+.topbar p {
+    margin: 2px 0 0;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.tag {
+    margin-left: auto;
+    color: var(--cyan);
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 32px 24px;
+}
+
+.hero {
+    padding: 20px 0;
+    margin-bottom: 16px;
+}
+
+.eyebrow {
+    color: var(--cyan);
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.hero h2 {
+    font-size: clamp(28px, 4vw, 42px);
+    letter-spacing: -1px;
+    margin: 10px 0;
+}
+
+.hero h2 span {
+    color: var(--cyan);
+}
+
+.muted {
+    color: var(--muted);
+}
+
+.small {
+    font-size: 12px;
+}
+
+.panel {
+    background: linear-gradient(140deg, var(--panel), #10182a);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 22px;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin: 18px 0 8px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #364761;
+    background: #0b1425;
+    color: var(--text);
+    font: inherit;
+}
+
+input[type="file"] {
+    font-size: 13px;
+}
+
+textarea {
+    resize: vertical;
+    font-family: Consolas, monospace;
+}
+
+button {
+    margin-top: 20px;
+    padding: 12px 18px;
+    background: var(--cyan);
+    color: #07131c;
+    border: 0;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    filter: brightness(1.08);
+}
+
+.notice {
+    padding: 12px;
+    margin-bottom: 16px;
+    border: 1px solid #85515a;
+    background: #38252b;
+    border-radius: 8px;
+}
+
+.score-card {
+    display: flex;
+    gap: 22px;
+    align-items: center;
+    padding: 20px;
+    background: #0d1728;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    margin: 18px 0;
+}
+
+.score {
+    font-size: 42px;
+    font-weight: 800;
+    color: var(--cyan);
+}
+
+.score small {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.risk {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.risk-high {
+    background: #54262e;
+    color: #ffabb2;
+}
+
+.risk-medium {
+    background: #51401f;
+    color: #ffda8b;
+}
+
+.risk-low {
+    background: #17443b;
+    color: #88f4d6;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid var(--line);
+    overflow-wrap: anywhere;
+}
+
+th {
+    width: 150px;
+    color: var(--muted);
+}
+
+li {
+    margin-bottom: 9px;
+}
+
+.indicator {
+    border-top: 1px solid var(--line);
+    padding: 14px 0;
+    overflow-wrap: anywhere;
+}
+
+.indicator strong {
+    color: #a5c8ff;
+}
+
+a {
+    color: var(--cyan);
+}
+
+.steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.steps div {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    padding: 16px;
+    border-radius: 10px;
+}
+
+.steps b {
+    color: var(--cyan);
+}
+
+.steps p {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+footer {
+    padding: 24px 0;
+    color: var(--muted);
+    text-align: center;
+    font-size: 12px;
+}
+
+@media (max-width: 650px) {
+    .container {
+        padding: 20px 14px;
+    }
+
+    .steps {
+        grid-template-columns: 1fr;
+    }
+
+    .score-card {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .topbar {
+        padding: 16px;
+    }
+}

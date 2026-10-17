@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PhishTriage | SOC Dashboard</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="topbar">
+    <div class="logo">PT</div>
+    <div>
+        <h1>PhishTriage</h1>
+        <p>Automated Phishing & Incident Triage</p>
+    </div>
+    <span class="tag">SOC TOOLKIT</span>
+</header>
+
+<main class="container">
+    <section class="hero">
+        <p class="eyebrow">SECURITY OPERATIONS CENTER</p>
+        <h2>Turn suspicious messages into<br>
+            <span>actionable triage.</span>
+        </h2>
+        <p class="muted">
+            Parse email headers, extract URLs, calculate risk,
+            and optionally enrich indicators with threat intelligence.
+        </p>
+    </section>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="notice">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <section class="panel">
+        <p class="eyebrow">01 / INPUT</p>
+        <h3>Submit a suspicious indicator</h3>
+
+        <form method="POST" enctype="multipart/form-data">
+            <label for="email_file">Upload an .eml file</label>
+            <input id="email_file" type="file"
+                   name="email_file" accept=".eml">
+
+            <label for="raw_email">Or paste raw email source</label>
+            <textarea id="raw_email" name="raw_email" rows="7"
+                placeholder="From: alerts@example.com
+Reply-To: unusual@example.net
+Subject: Verify your account
+
+Please review: https://example.com/login"></textarea>
+
+            <label for="suspicious_url">Or enter a suspicious URL</label>
+            <input id="suspicious_url" name="suspicious_url"
+                   type="url" placeholder="https://example.com/login">
+
+            <button type="submit">Run triage →</button>
+        </form>
+    </section>
+
+    {% if result %}
+    <section class="panel results">
+        <p class="eyebrow">02 / ANALYSIS</p>
+        <h3>Incident triage report</h3>
+
+        <div class="score-card">
+            <div class="score">{{ result.score }}<small>/100</small></div>
+            <div>
+                <span class="risk risk-{{ result.level|lower }}">
+                    {{ result.level }} RISK
+                </span>
+                <h3>{{ result.level }} priority review</h3>
+                <p class="muted">
+                    Preliminary heuristic score, not a definitive verdict.
+                </p>
+            </div>
+        </div>
+
+        <h4>Parsed email headers</h4>
+        <div class="table-wrap">
+            <table>
+                {% for key, value in parsed.headers.items() %}
+                <tr>
+                    <th>{{ key }}</th>
+                    <td>{{ value or "Not available" }}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <th>IP candidates</th>
+                    <td>{{ parsed.sender_ips|join(", ") or "None found" }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <h4>Findings</h4>
+        <ul>
+            {% for finding in result.findings %}
+                <li>{{ finding }}</li>
+            {% endfor %}
+        </ul>
+
+        <h4>Extracted URLs and threat intelligence</h4>
+        {% if result.enrichments %}
+            {% for item in result.enrichments %}
+            <div class="indicator">
+                <strong>{{ item.url }}</strong>
+                <p><b>VirusTotal:</b>
+                    {{ item.virustotal.message }}</p>
+                {% if item.virustotal.status == "ok" %}
+                <p>Malicious: {{ item.virustotal.malicious }} |
+                   Suspicious: {{ item.virustotal.suspicious }}</p>
+                {% endif %}
+
+                <p><b>urlscan.io:</b> {{ item.urlscan.message }}</p>
+                {% if item.urlscan.result_url %}
+                    <a href="{{ item.urlscan.result_url }}"
+                       target="_blank" rel="noopener noreferrer">
+                        View existing scan result
+                    </a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No URLs were extracted.</p>
+        {% endif %}
+
+        <h4>Recommended SOC actions</h4>
+        <ol>
+            {% for action in result.recommended_actions %}
+                <li>{{ action }}</li>
+            {% endfor %}
+        </ol>
+
+        <p class="muted small">
+            Generated: {{ result.generated_at }}
+        </p>
+
+        <form method="POST" action="/download-report">
+            <input type="hidden" name="report_json"
+                   value="{{ report_json|e }}">
+            <button type="submit">Download JSON incident report</button>
+        </form>
+    </section>
+    {% endif %}
+
+    <section class="steps">
+        <div><b>01 · Parse</b><p>Extract headers, IP candidates and URLs.</p></div>
+        <div><b>02 · Enrich</b><p>Check optional threat-intelligence APIs.</p></div>
+        <div><b>03 · Prioritize</b><p>Generate risk findings and next actions.</p></div>
+    </section>
+
+    <footer>
+        PhishTriage · Educational cybersecurity project · Local demo
+    </footer>
+</main>
+</body>
+</html>

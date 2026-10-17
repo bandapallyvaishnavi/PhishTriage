@@ -1,0 +1,12 @@
+@'
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.log
+app.py.backup*
+repair_api_functions.py
+'@ | Set-Content -Encoding utf8 .gitignore
